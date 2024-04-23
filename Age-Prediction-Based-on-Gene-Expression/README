@@ -1,8 +1,9 @@
+4/23/2024 = post of last working copy
 
 This dataset was obtained from Kaggle.
 The data did not have "age" labels in them, the proper ages were obtained from the source database
 
 A linear ML model was used to predict age
 
-MAE = 3.5
+MAE = 3.470532
 
