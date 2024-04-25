@@ -3,7 +3,7 @@
 This dataset was obtained from Kaggle.
 The data did not have "age" labels in them, the proper ages were obtained from the source database
 
-A linear ML model was used to predict age
+A Sequential ML model was used to predict age
 
 MAE = 3.470532
 
