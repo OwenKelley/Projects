@@ -1,0 +1,10 @@
+
+The main good design choices I was intent on following were having rounded corners on my website, having easy navigation that all have a quick path back to the home page, links that open in a different tab, a consistent formatting to keep each page familiar to the user, and a consistent color pallete that is easy on the eyes.
+
+The main bad design practices I wanted to avoid were animations, and confusing navigation.
+
+This website shows a few of the national parks along the east coast. On the main page you get a summary of the history of the national parks and a quick description of the website. On that same page you can sign up for the mailing list or use the "Contact Us" mailto.
+
+The sidebar on the left of the screen can be used to navigate through the other parks.
+
+Each national park page has pictures from the national park, a description of the park, and a link to learn more about the park if you are interested.

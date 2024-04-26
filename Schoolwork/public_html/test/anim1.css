@@ -1,0 +1,70 @@
+
+  .hover:hover
+  {
+   animation:
+    div45rot 250ms forwards,
+    divBtT 500ms 1s infinite;
+  }
+
+  divLtR
+  {
+/*   width: 200px; height: 200px;
+   background-color:lightblue;
+*/
+   position: relative;
+   animation-name:divLtR;
+   animation-duration:4s;
+   animation-iteration-count:infinite;
+/*   animation-direction: alternate; */
+  }
+  divBtT
+  {
+/*   width: 200px; height: 200px;
+   background-color:lightblue;
+*/
+   position: relative;
+   animation-name:divBtT;
+   animation-duration:4s;
+   animation-iteration-count:infinite;
+/*   animation-direction: alternate; */
+  }
+  divBounce
+  {
+/*   width: 200px; height: 200px;
+   background-color:lightblue;
+*/
+   position: relative;
+   animation: divBounce 1s, div45rot 1s;
+   animation-name:divBounce;
+   animation-duration:.5s;
+/*   animation-iteration-count:infinite; */
+  }
+
+  @keyframes div45rot
+  {
+   to 
+   {
+    transform: rotate(45deg);
+   }
+  }
+
+  @keyframes divBounce
+  {
+   0%   {left:0px; top:0px;}
+   100% {left:0px; top:-50px;}
+  }
+
+  @keyframes divLtR
+  {
+   0%   {left:0px; top:0px;}
+   50%  {left:100px; top:0px;}
+   100% {left:0px; top:0px;}
+  }
+  @keyframes divBtT
+  {
+   0%   {left:0px; top:0px;}
+   50%  {left:0px; top:100px;}
+   100% {left:0px; top:0px;}
+  }
+
+

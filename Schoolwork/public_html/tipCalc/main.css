@@ -1,0 +1,39 @@
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: black;
+    color: #0050ff;
+}
+main {
+    display: block;
+    width: 450px;
+    margin: 0 auto;
+    padding: 1em;
+    background: #000000;
+    border: 2px solid #0050ff;
+}
+h1 {
+    margin-top: 0;
+    color: #0050ff;
+}
+label {
+    width: 10em;
+    float: left;
+    padding-right: 1em;
+    padding-bottom: .5em;
+}
+#data input {
+    float: left;
+    width: 15em;
+    margin-bottom: .5em;
+}
+#data span {
+    padding-left: .25em;
+}
+#buttons input {
+    float: left;
+    margin-bottom: .5em;
+}
+br {
+    clear: left;
+}

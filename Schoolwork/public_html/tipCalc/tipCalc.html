@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tip Calculator</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+    <main>
+        <h1>Tip Calculator</h1>
+        <form action="phpTipCalc.php" method="post">
+
+            <div id="data">
+                <label>How many are splitting the bill: </label>
+                <input type="number" min="1" step="1" name="people" required><br>
+
+                <label>Price: </label>
+                <input type="number" min="0" step="0.01" name="price" required><br>
+
+                <label>Tax Percent: </label>
+                <input type="number"  min="0" step="0.01" name="tax" required><span>%</span><br>
+
+                <label>Tip Percent: </label>
+                <input type="number"  min="0" step="0.01" name="tipPercent" required><span>%</span><br>
+            </div>
+
+            <div id="buttons">
+                <label>&nbsp;</label>
+                <input type="submit" value="Calculate Tip and Cost"><br>
+                <input type="reset" value="Reset"><br>
+            </div>
+
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+	<head> <title>Form Template</title>
+      	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<!--THIS IS AN EXAMPLE OF AN EMBEDDED STYLE-->	
+   <style type = "text/css">
+
+    	body {	 
+                background-color: black;
+	     }
+
+	h1 { 	background-color: #050530;   
+     		color: blue;
+     		line-height: 2em;
+     		font-family: Arial, Verdana, sans-serif;
+		border: 3px solid #202099;
+		padding-left: 20px;		 
+	   }
+
+	.footer { 	font-size: small;
+             		text-align: center; 
+			font-style: italic;}
+
+	#wrapper { 	margin-left: auto;
+                      	margin-right: auto;
+                      	width:80%; }
+   </style>
+</head>
+
+<body>
+<div id="wrapper">
+<h1>
+ <form>
+  Email: <input type="email" name="email" id="email"><br>
+  Phone: <input type="tel" name="phone" id="phone"><br>
+
+
+  Preferred Communication: <select>
+    <option>Email</option>
+    <option>Phone</option>
+   </select><br>
+  <input type="submit">
+  <input type="reset">
+ </form>
+</h1>
+
+
+<h1>
+ <form>
+  Comment: <input type="text" name="Comment" id="Comment"><br>
+  <input type="submit">
+  <input type="reset">
+ </form>
+</h1>
+
+<h1>
+ <label for="myChoice">
+  Satisfaction: 
+ </label>
+  <br>Low <input type="range"name="myChoice"id="myChoice"min="1"max="100"> High
+</h1>
+
+
+
+<div class="footer"><hr /> Form Template</div>
+
+</div>
+</body>
+</html>
+
+
