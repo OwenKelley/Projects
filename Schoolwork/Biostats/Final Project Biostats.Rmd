@@ -1,0 +1,231 @@
+---
+title: "Age Gene Expression"
+output: word_document
+date: "2024-03-28"
+---
+```{r}
+# Install and Load psych and PerformanceAnalytics packages
+library(psych)
+library(PerformanceAnalytics)
+library(corrplot)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+
+# Enter file path here
+ageData <- read.delim("~/AI Datasets/Age Prediction/test_rows.txt")
+
+M <- cor(ageData)
+corrplot(M, method="number")
+
+#(ageData)
+```
+
+```{r}
+chart.Correlation(ageData, histogram = TRUE, method = "pearson")
+```
+
+
+```{r}
+boxplot(ageData$ELOVL2_6 ~ ageData$Age)
+boxplot(ageData$F5_2 ~ ageData$Age)
+boxplot(ageData$TRIM59_5 ~ ageData$Age)
+```
+```{r}
+table(ageData$Age)
+
+69 - 18 # 51 range
+51/3 # 17 thirds
+
+18+17    # 18 - 35y/o young
+35+17    # 36 - 52
+35+17+17 # 53 - 69
+
+# 18 - 34 # Range young
+# 35 - 51 # Range mid
+# 52 - 69 # Range old
+table(ageData$AgeZone)
+```
+
+```{r}
+boxplot(ageData$ELOVL2_6 ~ ageData$AgeZone)
+boxplot(ageData$F5_2 ~ ageData$AgeZone)
+boxplot(ageData$TRIM59_5 ~ ageData$AgeZone)
+```
+```{r}
+# ELOVL2_6 = .93
+# F5_2     = -.81
+# TRIM59_5 = .86
+# HOXC4_1  = .76
+# ZYG11A_4 = .75
+# RPA2_3   = .72
+# MEIS1_1  = -.71
+
+cor(ageData$ELOVL2_6,ageData$F5_2)
+cor(ageData$ELOVL2_6,ageData$TRIM59_5)
+cor(ageData$ELOVL2_6,ageData$HOXC4_1)
+cor(ageData$ELOVL2_6,ageData$ZYG11A_4)
+print("")
+cor(ageData$F5_2,ageData$TRIM59_5)
+cor(ageData$F5_2,ageData$HOXC4_1)
+cor(ageData$F5_2,ageData$ZYG11A_4)
+print("")
+cor(ageData$TRIM59_5,ageData$HOXC4_1)
+cor(ageData$TRIM59_5,ageData$ZYG11A_4)
+print("")
+cor(ageData$HOXC4_1,ageData$ZYG11A_4)
+#cor(ageData$F5_2,ageData$TRIM59_5)
+```
+
+
+```{r}
+# ELOVL2_6 = .93
+# F5_2     = -.81
+# TRIM59_5 = .86
+# HOXC4_1  = .76
+# ZYG11A_4 = .75
+# RPA2_3   = .72
+# MEIS1_1  = -.71
+
+anov2 <- aov(ageData$AgeZone ~ ageData$ELOVL2_6*ageData$F5_2, data = ageData)
+anov3 <- aov(ageData$AgeZone ~ ELOVL2_6*F5_2*TRIM59_5, data = ageData)
+
+lmModel <- lm(ageData$AgeZone ~ ELOVL2_6*F5_2*TRIM59_5, data = ageData)
+
+#summary(anov2)
+#summary(anov3)
+
+anova(lmModel)
+#summary(lmModel)
+
+```
+```{r}
+lmModel <- lm(ageData$Age ~ ageData$RPA2_3, data = ageData)
+plot(lmModel)
+lmModel2 <- lm(ageData$Age ~ ageData$HOXC4_1, data = ageData)
+plot(lmModel2)
+lmModel3 <- lm(ageData$Age ~ TRIM59_5, data = ageData)
+plot(lmModel3)
+```
+
+```{r}
+shapiro.test(ageData$TRIM59_5)
+shapiro.test(ageData$ELOVL2_6)
+shapiro.test(ageData$F5_2)
+shapiro.test(ageData$HOXC4_1)
+shapiro.test(ageData$RPA2_3)
+shapiro.test(ageData$ZYG11A_4)
+```
+
+```{r}
+interaction.plot(x.factor =  ageData$F5_2,    #X-axis Variable
+                 response = ageData$ELOVL2_6,      #Y-axis Variable
+                 trace.factor = ageData$AgeZone, #Variable for lines
+                 fun = mean,                 #metric to plot- mean
+                 type = "b", pch=c(19,19),   # Type of plot (line with points) and point type
+                 lty=1, lwd=2,               # Line type and Line Width
+                 col = c("#00AFBB", "#E7B800", "#FF0000"), #Line Colors 
+                 legend = TRUE,  trace.label = "Age", #Legend (wanted or not?) and Label
+                 xlab = "F5_2", ylab="Mean ELOVL2_6", # Axis Labels
+                 main="Interaction plot between Age Groups and ELOVL2_6") #Chart Title
+```
+
+
+```{r}
+
+summary(aov(AgeZone~ELOVL2_6*F5_2,data=subset(ageData,AgeZone==1)))
+
+```
+```{r}
+#install.packages("")
+library(jtools) # for summ()
+library(interactions)
+```
+
+```{r}
+#plotData <- lm(AgeZone~ELOVL2_6*F5_2, data = ageData)
+
+#TRIM59_5
+plotData <- lm(F5_2~ELOVL2_6*Age, data = ageData)
+
+interact_plot(plotData, pred = ELOVL2_6, modx = Age)
+```
+
+
+```{r}
+library(BSDA)
+```
+
+
+```{r}
+preYoungF5 = data.frame(ageData$F5_2, ageData$Age, ageData$AgeZone == 1)
+preOldF5 = data.frame(ageData$F5_2, ageData$Age, ageData$AgeZone == 3)
+
+colnames(preYoungF5)
+
+youngF5 <- subset(preYoungF5, ageData.AgeZone....1 == TRUE) 
+oldF5 <- subset(preOldF5, ageData.AgeZone....3 == TRUE) 
+
+t.test(youngF5$ageData.F5_2, oldF5$ageData.F5_2, alternative='two.sided', mu=0,conf.level=.95,var.equal = TRUE)
+
+print("Normality Test")
+shapiro.test(youngF5$ageData.F5_2)
+shapiro.test(oldF5$ageData.F5_2)
+
+lmModel <- lm(youngF5$ageData.Age ~ youngF5$ageData.F5_2, data = youngF5)
+plot(lmModel)
+```
+
+```{r}
+preYoungELOV = data.frame(ageData$ELOVL2_6, ageData$AgeZone == 1)
+preOldELOV = data.frame(ageData$ELOVL2_6, ageData$AgeZone == 3)
+
+colnames(preYoungELOV)
+
+youngELOV <- subset(preYoungELOV, ageData.AgeZone....1 == TRUE) 
+oldELOV <- subset(preOldELOV, ageData.AgeZone....3 == TRUE) 
+
+t.test(youngELOV$ageData.ELOVL2_6, oldELOV$ageData.ELOVL2_6, alternative='two.sided', mu=0,conf.level=.95,var.equal = TRUE)
+
+print("Normality Test")
+shapiro.test(youngELOV$ageData.ELOVL2_6)
+shapiro.test(oldELOV$ageData.ELOVL2_6)
+```
+
+
+```{r}
+preYoungTRIM = data.frame(ageData$TRIM59_5, ageData$AgeZone == 1)
+preOldTRIM = data.frame(ageData$TRIM59_5, ageData$AgeZone == 3)
+
+colnames(preYoungTRIM)
+
+youngTRIM <- subset(preYoungTRIM, ageData.AgeZone....1 == TRUE) 
+oldTRIM <- subset(preOldTRIM, ageData.AgeZone....3 == TRUE) 
+
+t.test(youngTRIM$ageData.TRIM59_5, oldTRIM$ageData.TRIM59_5, alternative='two.sided', mu=0,conf.level=.95,var.equal = TRUE)
+
+print("Normality Test")
+shapiro.test(youngTRIM$ageData.TRIM59_5)
+shapiro.test(oldTRIM$ageData.TRIM59_5)
+
+```
+
+
+```{r}
+tapply(ageData$TRIM59_5,ageData$AgeZone,sd)
+6.362983/4.381277
+```
+
+```{r}
+tapply(ageData$F5_2,ageData$AgeZone,sd)
+4.312698/3.710674
+```
+
+```{r}
+tapply(ageData$ELOVL2_6,ageData$AgeZone,sd)
+5.610241/4.478467
+```
+
+
+
+
