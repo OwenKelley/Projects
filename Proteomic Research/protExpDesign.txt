@@ -1,0 +1,17 @@
+label	condition	replicate
+14WIS Spectral Count	OldWIS	1
+14WS Spectral Count	OldWS	1
+34WIS Spectral Count	YoungWIS	1
+34WS Spectral Count	YoungWS	1
+39WIS Spectral Count	YoungWIS	2
+39WS Spectral Count	YoungWS	2
+46WIS Spectral Count	YoungWIS	3
+46WS Spectral Count	YoungWS	3
+55WIS Spectral Count	OldWIS	2
+55WS Spectral Count	OldWS	2
+61WIS Spectral Count	YoungWIS	4
+61WS Spectral Count	YoungWS	4
+80WIS Spectral Count	OldWIS	3
+80WS Spectral Count	OldWS	3
+82WIS Spectral Count	OldWIS	4
+82WS Spectral Count	OldWS	4

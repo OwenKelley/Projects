@@ -1,0 +1,170 @@
+---
+title: "R Proteomics"
+Author: Owen Kelley
+date: "2024-01-08"
+---
+```{r}
+protData <- read.delim("~/txt Rhesus macaque proteomics.txt")
+protDataExpDesign <- read.delim("~/protExpDesign.txt")
+
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("DEP")
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("limma")
+
+# Analysis
+library("DEP")
+
+# Data Handling
+library("dplyr")
+```
+
+```{r}
+# Dimensions & Column Names
+dim(protData)
+colnames(protData)
+```
+
+```{r}
+data_unique <- make_unique(protData, "Gene", "Protein.ID", delim = ";")
+#View(data_unique)
+dim(data_unique)
+# Are there any duplicated names?
+protData$name %>% duplicated() %>% any()
+```
+
+```{r}
+# Generate a SummarizedExperiment object using an experimental design
+LFQ_columns <- grep("X", colnames(data_unique)) # get LFQ column numbers
+experimental_design <- protDataExpDesign
+#View(experimental_design)
+data_se <- make_se(data_unique, LFQ_columns, experimental_design)
+
+```
+
+```{r}
+# Plot a barplot of the protein identification overlap between samples
+plot_frequency(data_se)
+```
+
+```{r}
+# Filter for proteins that are identified in all replicates of at least one condition
+data_filt <- filter_missval(data_se, thr = 0)
+dim(data_filt)
+
+# Less stringent filtering:
+# Filter for proteins that are identified in 2 out of 3 replicates of at least one condition
+data_filt2 <- filter_missval(data_se, thr = 1)
+dim(data_filt2)
+
+# Plot a barplot of the protein identification overlap between samples
+plot_coverage(data_filt)
+```
+
+```{r}
+# Plot a barplot of the number of identified proteins per samples
+plot_numbers(data_filt)
+```
+
+```{r}
+# Normalize the data
+data_norm <- normalize_vsn(data_filt)
+# Visualize normalization by boxplots for all samples before and after normalization
+plot_normalization(data_filt)
+plot_normalization(data_norm)
+```
+
+
+```{r}
+# Plot a heatmap of proteins with missing values
+plot_missval(data_filt)
+```
+
+```{r}
+# Plot intensity distributions and cumulative fraction of proteins with and without missing values
+plot_detect(data_filt)
+```
+
+```{r}
+# Impute missing data using random draws from a Gaussian distribution centered around a minimal value (for MNAR)
+data_imp <- impute(data_norm, fun = "MinProb", q = 0.01)
+
+# Impute missing data using random draws from a manually defined left-shifted Gaussian distribution (for MNAR)
+data_imp_man <- impute(data_norm, fun = "man", shift = 1.8, scale = 0.3)
+
+```
+
+```{r}
+# Plot intensity distributions before and after imputation
+plot_imputation(data_norm, data_imp)
+```
+
+
+```{r}
+# Test manually defined comparisons
+
+data_diff_all_contrasts <- test_diff(data_imp, type = "all")
+
+data_diff_manualWSyo <- test_diff(data_imp, type = "manual", 
+                              test = c("YoungWS", "OldWS"))
+data_diff_manualWISyo <- test_diff(data_imp, type = "manual", 
+                              test = c("YoungWIS", "OldWIS"))
+
+```
+
+```{r}
+# Denotes significant proteins based on user defined cutoffs
+dep1 <- add_rejections(data_diff_all_contrasts, alpha = 0.05, lfc = log2(1.5))
+
+
+plot_cor(dep1, significant = TRUE, lower = -1, upper = 1, pal = "YlOrBr")
+
+# To pick colors use RColorBrewer
+plot_pca(dep1, x = 1, y = 2, n = 294, point_size = 4)
+
+
+plot_heatmap(dep1, type = "centered", kmeans = TRUE, 
+             k = 6, col_limit = 4, show_row_names = FALSE,
+             indicate = c("condition", "replicate"))
+
+plot_heatmap(dep1, type = "contrast", kmeans = TRUE, 
+             k = 6, col_limit = 10, show_row_names = FALSE)
+
+plot_volcano(dep1, contrast = "OldWIS_vs_YoungWIS", label_size = 2, add_names = TRUE)
+plot_volcano(dep1, contrast = "OldWS_vs_YoungWS", label_size = 2, add_names = TRUE)
+plot_volcano(dep1, contrast = "OldWIS_vs_OldWS", label_size = 2, add_names = TRUE)
+plot_volcano(dep1, contrast = "YoungWIS_vs_YoungWS", label_size = 2, add_names = TRUE)
+
+# Plot a barplot for the protein USP15 with the data centered
+plot_single(dep1, proteins = c("SPTB", "GJA3"), type = "centered")
+
+# Plot a frequency plot of significant proteins for the different conditions
+plot_cond(dep1)
+```
+
+
+```{r}
+# Generates results table
+data_results <- get_results(dep1)
+
+# Number of significant proteins
+data_results %>% filter(significant) %>% nrow()
+
+```
+
+
+```{r}
+# Save analyzed data
+save(data_se, data_norm, data_imp, data_diff_all_contrasts, dep1, file = "data.RData")
+# The data can be loaded in future R sessions using this command
+# load("data.RData")
+```
+
+
+
+
+
