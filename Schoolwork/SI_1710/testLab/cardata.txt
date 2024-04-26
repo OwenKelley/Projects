@@ -1,0 +1,5 @@
+Ford Maverick 42000
+Toyota Corolla 25500
+Dodge Charger 29700
+Chevrolet Impala 32900
+Pontiac Firebird 45600
