@@ -1,0 +1,42 @@
+
+============================================
+ class  autoTypeImp
+
+ + setValues(double, double, double): void
+ + createDash() const: string 
+ + drive(double): void
+ + getOdometer() const: double
+ + getFuelLevel() const: double
+ + getFuelEfficiency() const: double
+ 
+ + setOdometer(double): void
+ + setFuelLevel(double): void
+ + setFuelEfficiency(double): void 
+ + addFuel(double): double
+
+ + autoType(double, double, double, double)
+ + autoType()
+
+
+ - miles: double
+ - gallons: double
+ - mpg: double
+ - MAXFUEL: double
+=============================================
+ class hybridTypeImp (base class autoTypeImp)
+
+ + setChargeLevel(double): void
+ + getChargeLevel() const: double
+ + setChargeEfficiency(double): void
+ + getChargeEfficiency() const: double
+ + createDash() const: string
+ + hdrive(double): void
+ 
+ + hybridType(double, double, double, double, double, double)
+ + hybridType()
+
+ - charge: double
+ - electricEfficiency: double
+ - electricMode: bool
+=============================================
+
